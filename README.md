@@ -1,70 +1,243 @@
-## Vite-React-TS-Tailwind-Starter
+## Project Readme
 
-Choosing a technology stack is a very subjective matter, if you happen to like using `Vite`, `Tailwind`, `TS` and `shadcn ui` and more to build React SPA applications, then give it a try.
+Welcome to the project! This guide is designed to help junior developers navigate the codebase, understand how to add routes, query data, and style components.
 
-## Run
+## Table of Contents
 
+1. [Project Structure](#project-structure)
 
-```sh
-yarn
-yarn dev
-```
+2. [How to Add Routes](#how-to-add-routes)
 
-We prefer `Yarn` as package manager, If you want to use `pnpm` or `npm`, feel free to use
+3. [How to Query Data](#how-to-query-data)
 
+4. [Styling Components](#styling-components)
 
-## Tech Stack
+5. [Common Practices](#common-practices)
 
-- [vite](https://vitejs.dev/)
-- [react](https://reactjs.org/)
-- [shadcn ui](https://ui.shadcn.com/)
-- [react-i18next](https://github.com/i18next/react-i18next)
-- [react-lucide](https://lucide.dev/)
-- [transmart](https://github.com/Quilljou/transmart)
-- [react-query](https://tanstack.com/query/latest/)
-- [tailwindcss](https://tailwindcss.com/)
-- [less](http://lesscss.org/)
-- [postcss](https://postcss.org/)
-- [react-router-dom](https://reactrouter.com/en/6.16.0)
-- [eslint](https://eslint.org/)/[stylelint](https://stylelint.io/)
-- [prettier](https://prettier.io/)
-- [svgr](https://react-svgr.com/)
-- [editorconfig](https://editorconfig.org/)
-- [husky](https://typicode.github.io/husky/#/)/[lint-staged](https://github.com/okonet/lint-staged)
-- [commitlint](https://commitlint.js.org/)
+6. [Additional Resources](#additional-resources)
 
+---
 
 ## Project Structure
 
-```sh
-src
-├── app.tsx     # App entry
-├── assets      # Assets for images, favicon etc
-├── components  # React components
-├── hooks       # React hooks
-├── i18n        # i18n files
-├── lib         # Utils、tools、services
-├── main.tsx    # File entry
-├── pages       # One .tsx per page
-├── router.tsx  # Routers
-├── styles      # Less files
-├── types       # Typescript types
-└── vite-env.d.ts
+src/
+
+├── api/
+
+│ ├── index.ts
+
+│ └── types.ts
+
+├── components/
+
+│ └── ui/
+
+│ └── page.tsx
+
+├── pages/
+
+│ └── test/
+
+│ └── index.tsx
+
+├── router.tsx
+
+- **src/api/**: Contains API calls and related types.
+
+- **src/components/**: Reusable UI components.
+
+- **src/pages/**: Page components that correspond to routes.
+
+- **src/router.tsx**: Defines the application's routing logic.
+
+---
+
+## How to Add Routes
+
+We use a file-based routing system. Each file inside `src/pages/` represents a route in the application.
+
+### Steps to Add a New Route
+
+1.  **Create a New Page Component**:
+
+Create a new folder inside `src/pages/` with the name of your route.
+
+```bash
+mkdir src/pages/new-route
 ```
 
-## Deploy
+2.  **Add an index.tsx File:**:
 
-[Cloudflare Pages](https://pages.cloudflare.com/) is my first option to deploy React App，follow [this documentation](https://developers.cloudflare.com/pages/framework-guides/deploy-a-react-site/#deploying-with-cloudflare-pages) to deploy your site. Don't forget build directory should	choose `dist`
+Inside your new folder, create an index.tsx file.
 
-[Vercel](https://pages.cloudflare.com/) is a good option too，Go to [Vercel](https://vercel.com/new) and link to your Git Repo
+```bash
+touch src/pages/new-route/index.tsx
+```
 
-Enjoy building.
+3.  **Add an index.tsx File:**:
+    Define Your Component:
+
+```javascript
+// src/pages/new-route/index.tsx
+
+import Page from 'src/components/ui/page'
+
+export default function NewRoute() {
+  return (
+    <Page>
+      <h1>New Route</h1>
+
+      <p>Welcome to the new route!</p>
+    </Page>
+  )
+}
+```
+
+3.  **Add an index.tsx File:**:
+
+Define Your Component:
+
+```javascript
+// src/pages/new-route/index.tsx
+
+import Page from 'src/components/ui/page'
+
+export default function NewRoute() {
+  return (
+    <Page>
+      <h1>New Route</h1>
+
+      <p>Welcome to the new route!</p>
+    </Page>
+  )
+}
+```
+
+4.  **Update router:**:
+
+```javascript
+
+// src/router.tsx
+import { createBrowserRouter, RouteObject } from  'react-router-dom'
+
+import  ErrorPage  from  './components/error-page'
+
+import { getDefaultLayout } from  './components/layout'
+
+import  HomePage  from  './pages/home'
+
+import  Test  from  './pages/test'
 
 
-## Related
 
-- [Next Starter](https://github.com/Quilljou/next-ts-tailwind-starter)
+export  const  routerObjects:  RouteObject[] = [
 
-- [React Starter](https://github.com/Quilljou/vite-react-ts-tailwind-starter)
+{
 
-- [Figma Starter](https://github.com/Quilljou/figma-react-tailwind-starter)
+path:  '/',
+
+Component:  HomePage,
+
+},
+
+{
+
+path:  '/newRoute',
+
+Component:  NewRouteComponent,
+
+},
+
+]
+
+
+
+export  function  createRouter():  ReturnType<typeof  createBrowserRouter> {
+
+const  routeWrappers  =  routerObjects.map((router) => {
+
+// @ts-ignore TODO: better type support
+
+const  getLayout  =  router.Component?.getLayout  ||  getDefaultLayout
+
+const  Component  =  router.Component!
+
+const  page  =  getLayout(<Component  />)
+
+return {
+
+...router,
+
+element:  page,
+
+Component:  null,
+
+ErrorBoundary:  ErrorPage,
+
+}
+
+})
+
+return  createBrowserRouter(routeWrappers)
+
+}
+```
+
+```javascript
+// src/pages/new-route/index.tsx
+
+import Page from 'src/components/ui/page'
+
+export default function NewRoute() {
+  return (
+    <Page>
+      <h1>New Route</h1>
+
+      <p>Welcome to the new route!</p>
+    </Page>
+  )
+}
+```
+
+## How to Add Routes
+
+We use `@tanstack/react-query` for data fetching and state management.
+
+```javascript
+// How to query data
+
+// src/pages/test/index.tsx
+
+import { useQuery } from '@tanstack/react-query'
+
+import { getPokemon } from 'src/api'
+
+import Page from 'src/components/ui/page'
+
+export default function Test() {
+  const query = useQuery(['pokemon'], () => getPokemon('ditto'))
+
+  if (query.isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (query.error || !query.data) {
+    return <div>Pokemon doesn't exist</div>
+  }
+
+  return (
+    <Page>
+      <h1>{query.data.name}</h1>
+
+      <img src={query.data.sprites.front_default} alt={query.data.name} />
+    </Page>
+  )
+}
+```
+
+## Common Practices
+
+- **Consistent Naming**: Use descriptive and consistent names for files and functions.
+- **Code Organization**: Keep related code together, and separate concerns appropriately.
+- **Error Handling**: Always handle loading and error states when fetching data.
+- **Reusability**: Create reusable components to reduce duplication.
