@@ -1,6 +1,9 @@
-## Project Readme
+## Project PokeDex
 
 Welcome to the project! This guide is designed to help junior developers navigate the codebase, understand how to add routes, query data, and style components.
+
+Here are the [designs](https://www.figma.com/design/WGzJL08MfwYkCHnroEUQiU/Pok%C3%A9dex-%28Community%29?node-id=1021-1175&node-type=frame&t=H8DB11VhBeyfmX1c-0)
+
 
 ## Table of Contents
 
